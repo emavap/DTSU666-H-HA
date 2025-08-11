@@ -1,0 +1,86 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "DTSU666 Emulator Configuration",
+        "description": "Configure the DTSU666-H Modbus TCP server emulator. Map your Home Assistant sensor entities to the corresponding power meter registers.",
+        "data": {
+          "port": "Modbus TCP Port",
+          "unit_id": "Modbus Unit ID",
+          "voltage_entity": "Voltage Entity (L1)",
+          "current_l1_entity": "Current L1 Entity",
+          "current_l2_entity": "Current L2 Entity", 
+          "current_l3_entity": "Current L3 Entity",
+          "power_entity": "Active Power Entity",
+          "energy_import_entity": "Energy Import Entity",
+          "energy_export_entity": "Energy Export Entity",
+          "frequency_entity": "Frequency Entity",
+          "reactive_power_entity": "Reactive Power Entity",
+          "power_factor_entity": "Power Factor Entity",
+          "disable_validation": "Disable Entity Validation"
+        },
+        "data_description": {
+          "port": "TCP port for the Modbus server (default: 502)",
+          "unit_id": "Modbus unit/slave ID (default: 1)",
+          "voltage_entity": "Home Assistant sensor entity for voltage measurements",
+          "current_l1_entity": "Home Assistant sensor entity for L1 current",
+          "current_l2_entity": "Home Assistant sensor entity for L2 current",
+          "current_l3_entity": "Home Assistant sensor entity for L3 current",
+          "power_entity": "Home Assistant sensor entity for active power",
+          "energy_import_entity": "Home Assistant sensor entity for imported energy",
+          "energy_export_entity": "Home Assistant sensor entity for exported energy",
+          "frequency_entity": "Home Assistant sensor entity for frequency",
+          "reactive_power_entity": "Home Assistant sensor entity for reactive power",
+          "power_factor_entity": "Home Assistant sensor entity for power factor",
+          "disable_validation": "Disable validation that rejects connections when entities have invalid data"
+        }
+      }
+    },
+    "error": {
+      "port_in_use": "Port is already in use by another service",
+      "invalid_port": "Invalid port number (must be between 1-65535)"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "DTSU666 Emulator Options",
+        "description": "Update all settings for the DTSU666-H emulator. Network changes (port/unit ID) will restart the server automatically.",
+        "data": {
+          "port": "Modbus TCP Port",
+          "unit_id": "Modbus Unit ID",
+          "voltage_entity": "Voltage Entity (L1)",
+          "current_l1_entity": "Current L1 Entity",
+          "current_l2_entity": "Current L2 Entity", 
+          "current_l3_entity": "Current L3 Entity",
+          "power_entity": "Active Power Entity",
+          "energy_import_entity": "Energy Import Entity",
+          "energy_export_entity": "Energy Export Entity",
+          "frequency_entity": "Frequency Entity",
+          "reactive_power_entity": "Reactive Power Entity",
+          "power_factor_entity": "Power Factor Entity",
+          "disable_validation": "Disable Entity Validation"
+        },
+        "data_description": {
+          "port": "TCP port for the Modbus server (changing will restart server)",
+          "unit_id": "Modbus unit/slave ID (changing will restart server)",
+          "voltage_entity": "Home Assistant sensor entity for voltage measurements",
+          "current_l1_entity": "Home Assistant sensor entity for L1 current",
+          "current_l2_entity": "Home Assistant sensor entity for L2 current",
+          "current_l3_entity": "Home Assistant sensor entity for L3 current",
+          "power_entity": "Home Assistant sensor entity for active power",
+          "energy_import_entity": "Home Assistant sensor entity for imported energy",
+          "energy_export_entity": "Home Assistant sensor entity for exported energy",
+          "frequency_entity": "Home Assistant sensor entity for frequency",
+          "reactive_power_entity": "Home Assistant sensor entity for reactive power",
+          "power_factor_entity": "Home Assistant sensor entity for power factor",
+          "disable_validation": "Disable validation that rejects connections when entities have invalid data"
+        }
+      }
+    },
+    "error": {
+      "port_in_use": "Port is already in use by another service",
+      "invalid_port": "Invalid port number (must be between 1-65535)"
+    }
+  }
+}
