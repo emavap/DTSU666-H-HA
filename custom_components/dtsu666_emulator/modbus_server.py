@@ -7,8 +7,18 @@ import struct
 from typing import Any, Dict
 
 # Import compatibility for different pymodbus versions
-from pymodbus.datastore import ModbusSequentialDataBlock, ModbusSlaveContext, ModbusServerContext
+from pymodbus.datastore import ModbusSequentialDataBlock, ModbusServerContext
 from pymodbus.device import ModbusDeviceIdentification
+
+# Handle ModbusSlaveContext vs ModbusDeviceContext change in 3.10+
+try:
+    from pymodbus.datastore import ModbusSlaveContext
+    DEVICE_CONTEXT_CLASS = ModbusSlaveContext
+    DEVICE_CONTEXT_PARAM = "slaves"
+except ImportError:
+    from pymodbus.datastore import ModbusDeviceContext
+    DEVICE_CONTEXT_CLASS = ModbusDeviceContext  
+    DEVICE_CONTEXT_PARAM = "device_ids"
 from pymodbus.constants import Endian
 from pymodbus.payload import BinaryPayloadBuilder, BinaryPayloadDecoder
 # Handle ModbusExceptions vs ModbusException naming change
@@ -59,7 +69,7 @@ class ValidatedModbusRequestHandler(ModbusConnectedRequestHandler):
         # Process request normally if entities are valid
         return await super().execute(request, *addr)
 
-class ValidatedModbusSlaveContext(ModbusSlaveContext):
+class ValidatedModbusSlaveContext(DEVICE_CONTEXT_CLASS):
     """Custom Modbus slave context that validates entity data before responding."""
     
     def __init__(self, server_instance, *args, **kwargs):
@@ -171,19 +181,30 @@ class DTSU666ModbusServer:
             holding_registers = ModbusSequentialDataBlock(0x0000, [0] * 0x5000)
             
             # Setup validated slave context that checks entity validity
-            slave_context = ValidatedModbusSlaveContext(
-                self,  # Pass server instance for validation
-                di=None,  # Discrete inputs
-                co=None,  # Coils
-                hr=holding_registers,  # Holding registers
-                ir=holding_registers   # Input registers (same as holding for this device)
-            )
+            # Handle parameter changes in newer pymodbus versions
+            context_params = {
+                "di": None,  # Discrete inputs
+                "co": None,  # Coils
+                "hr": holding_registers,  # Holding registers
+                "ir": holding_registers   # Input registers (same as holding for this device)
+            }
             
-            # Setup server context
-            self.context = ModbusServerContext(
-                slaves={self.config["unit_id"]: slave_context}, 
-                single=False
-            )
+            try:
+                # Try with older parameters that may have been removed
+                slave_context = ValidatedModbusSlaveContext(
+                    self,  # Pass server instance for validation
+                    **context_params
+                )
+            except TypeError:
+                # If that fails, try without deprecated parameters
+                slave_context = ValidatedModbusSlaveContext(
+                    self,  # Pass server instance for validation 
+                    **context_params
+                )
+            
+            # Setup server context - handle API parameter change
+            context_kwargs = {DEVICE_CONTEXT_PARAM: {self.config["unit_id"]: slave_context}, "single": False}
+            self.context = ModbusServerContext(**context_kwargs)
             
             # Device identification
             identity = ModbusDeviceIdentification()
@@ -194,20 +215,29 @@ class DTSU666ModbusServer:
             identity.ModelName = "DTSU666-H"
             identity.MajorMinorRevision = "1.0"
             
-            # Create server with custom request handler
-            # Create a closure to capture the server instance
-            server_instance = self
-            
-            class DTSU666RequestHandler(ValidatedModbusRequestHandler):
-                def __init__(self, *args, **kwargs):
-                    super().__init__(server_instance, *args, **kwargs)
-            
-            self.server = ModbusTcpServer(
-                context=self.context,
-                identity=identity,
-                address=("0.0.0.0", self.config["port"]),
-                handler=DTSU666RequestHandler
-            )
+            # Create server - handle API changes for handler parameter  
+            try:
+                # Try older API with handler parameter (pre-3.4.0)
+                server_instance = self
+                
+                class DTSU666RequestHandler(ValidatedModbusRequestHandler):
+                    def __init__(self, *args, **kwargs):
+                        super().__init__(server_instance, *args, **kwargs)
+                
+                self.server = ModbusTcpServer(
+                    context=self.context,
+                    identity=identity,
+                    address=("0.0.0.0", self.config["port"]),
+                    handler=DTSU666RequestHandler
+                )
+            except TypeError:
+                # Newer API without handler parameter (3.4.0+)
+                self.server = ModbusTcpServer(
+                    context=self.context,
+                    identity=identity,
+                    address=("0.0.0.0", self.config["port"])
+                )
+                _LOGGER.warning("Using newer pymodbus API - custom validation handler not available")
             
             # Initialize default values
             await self._initialize_registers()
