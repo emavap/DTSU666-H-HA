@@ -6,14 +6,25 @@ import logging
 import struct
 from typing import Any, Dict
 
+# Import compatibility for different pymodbus versions
 from pymodbus.datastore import ModbusSequentialDataBlock, ModbusSlaveContext, ModbusServerContext
 from pymodbus.device import ModbusDeviceIdentification
-from pymodbus.server.async_io import ModbusTcpServer
 from pymodbus.constants import Endian
 from pymodbus.payload import BinaryPayloadBuilder, BinaryPayloadDecoder
-from pymodbus.interfaces import IModbusSlaveContext
 from pymodbus.pdu import ModbusExceptions
-from pymodbus.server.async_io import ModbusConnectedRequestHandler
+
+# Handle server imports - pymodbus 3.6+ moved these from server.async_io to server
+try:
+    from pymodbus.server import ModbusTcpServer, ModbusConnectedRequestHandler
+except ImportError:
+    from pymodbus.server.async_io import ModbusTcpServer, ModbusConnectedRequestHandler
+
+# Handle optional interfaces import for older versions
+try:
+    from pymodbus.interfaces import IModbusSlaveContext
+except ImportError:
+    # Not needed in newer versions
+    IModbusSlaveContext = None
 
 from homeassistant.core import HomeAssistant, State
 from homeassistant.helpers.event import async_track_state_change_event
