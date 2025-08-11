@@ -100,19 +100,19 @@ This ensures the emulator provides realistic behavior matching real hardware fai
 
 The integration uses the authentic DTSU666-H register map:
 
-| Register | Address | Type | Description | Unit |
-|----------|---------|------|-------------|------|
-| Voltage L1 | 0x2000 | float32 | Phase 1 Voltage | V |
-| Voltage L2 | 0x2002 | float32 | Phase 2 Voltage | V |
-| Voltage L3 | 0x2004 | float32 | Phase 3 Voltage | V |
-| Current L1 | 0x2008 | float32 | Phase 1 Current | A |
-| Current L2 | 0x200A | float32 | Phase 2 Current | A |
-| Current L3 | 0x200C | float32 | Phase 3 Current | A |
-| Active Power | 0x2010 | int32 | Total Active Power | kW |
-| Reactive Power | 0x2014 | int32 | Total Reactive Power | kvar |
-| Frequency | 0x200E | int16 | Grid Frequency | Hz |
-| Energy Import | 0x4000 | int64 | Imported Energy | kWh |
-| Energy Export | 0x400A | int64 | Exported Energy | kWh |
+| Register | Address | Type | Description | Unit | Scaling |
+|----------|---------|------|-------------|------|---------|
+| Voltage L1 | 0x2000 | float32 | Phase 1 Voltage | V | Direct |
+| Voltage L2 | 0x2006 | float32 | Phase 2 Voltage | V | Direct |
+| Voltage L3 | 0x2008 | float32 | Phase 3 Voltage | V | Direct |
+| Current L1 | 0x2002 | float32 | Phase 1 Current | A | Direct |
+| Current L2 | 0x200A | float32 | Phase 2 Current | A | Direct |
+| Current L3 | 0x200C | float32 | Phase 3 Current | A | Direct |
+| Active Power | 0x2004 | float32 | Total Active Power | W | ×1000 |
+| Reactive Power | 0x2012 | float32 | Total Reactive Power | var | ×1000 |
+| Frequency | 0x200E | float32 | Grid Frequency | Hz | Direct |
+| Energy Import | 0x400A | float32 | Imported Energy | kWh | Direct |
+| Energy Export | 0x4000 | float32 | Exported Energy | kWh | Direct |
 
 ## Troubleshooting
 
