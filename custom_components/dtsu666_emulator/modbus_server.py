@@ -76,12 +76,10 @@ class DTSU666ModbusServer:
         mappings = {
             "voltage_entity": "voltage_l1",
             "current_l1_entity": "current_l1", 
-            "power_entity": "active_power",
-            "energy_import_entity": "energy_import",
-            "energy_export_entity": "energy_export",
+            "power_entity": "output_power",
+            "energy_import_entity": "energy_consumed_main",
+            "energy_export_entity": "energy_injected_main",
             "frequency_entity": "frequency",
-            "reactive_power_entity": "reactive_power",
-            "power_factor_entity": "power_factor",
         }
         
         for config_key, register_key in mappings.items():

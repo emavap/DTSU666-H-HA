@@ -123,20 +123,6 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                         device_class="frequency"
                     )
                 ),
-            vol.Optional("reactive_power_entity", default=user_input.get("reactive_power_entity")): 
-                selector.EntitySelector(
-                    selector.EntitySelectorConfig(
-                        domain="sensor",
-                        device_class="power"
-                    )
-                ),
-            vol.Optional("power_factor_entity", default=user_input.get("power_factor_entity")): 
-                selector.EntitySelector(
-                    selector.EntitySelectorConfig(
-                        domain="sensor",
-                        device_class="power_factor"
-                    )
-                ),
             vol.Optional("disable_validation", default=user_input.get("disable_validation", False)): 
                 selector.BooleanSelector(),
         })
@@ -265,20 +251,6 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
                         selector.EntitySelectorConfig(
                             domain="sensor",
                             device_class="frequency"
-                        )
-                    ),
-                vol.Optional("reactive_power_entity", default=current_data.get("reactive_power_entity")): 
-                    selector.EntitySelector(
-                        selector.EntitySelectorConfig(
-                            domain="sensor",
-                            device_class="power"
-                        )
-                    ),
-                vol.Optional("power_factor_entity", default=current_data.get("power_factor_entity")): 
-                    selector.EntitySelector(
-                        selector.EntitySelectorConfig(
-                            domain="sensor",
-                            device_class="power_factor"
                         )
                     ),
                 vol.Optional("disable_validation", default=current_data.get("disable_validation", False)): 

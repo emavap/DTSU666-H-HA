@@ -102,18 +102,21 @@ The integration uses the **DTSU666 Huawei register map** based on verified imple
 
 | Register | Address | Type | Description | Unit | Scale Factor |
 |----------|---------|------|-------------|------|-------------|
-| Voltage L1 | 0x2006 | int16 | Single-Phase Voltage | V | ×10 |
-| Current L1 | 0x200C | int16 | Single-Phase Current | A | ×1000 |
-| Active Power L1 | 0x2014 | int16 | L1 Active Power | W | ×10 |
-| Reactive Power L1 | 0x201C | int16 | L1 Reactive Power | var | ×10 |
-| Apparent Power L1 | 0x2022 | int16 | L1 Apparent Power | VA | ×10 |
-| Power Factor L1 | 0x202C | int16 | L1 Power Factor | - | ×1000 |
-| Frequency | 0x2044 | int16 | Grid Frequency | Hz | ×100 |
-| Total Active Power | 0x2012 | int16 | Total Output Power | W | ×10 |
-| Total Reactive Power | 0x201A | int16 | Total Reactive Power | var | ×10 |
-| Total Power Factor | 0x202A | int16 | Total Power Factor | - | ×1000 |
-| Energy Import | 0x401E | int32 | Energy Consumed | kWh | ×1 |
-| Energy Export | 0x4028 | int32 | Energy Injected | kWh | ×1 |
+| Grid Frequency | 0x2044 | int16 | Grid Frequency | Hz | ×100 |
+| L1 Voltage | 0x2006 | int16 | L1 Three-Phase Grid Voltage | V | ×10 |
+| L2 Voltage | 0x2008 | int16 | L2 Three-Phase Grid Voltage | V | ×10 |
+| L3 Voltage | 0x200A | int16 | L3 Three-Phase Grid Voltage | V | ×10 |
+| L1 Current | 0x200C | int16 | L1 Three-Phase Grid Output Current | A | ×1000 |
+| L2 Current | 0x200E | int16 | L2 Three-Phase Grid Output Current | A | ×1000 |
+| L3 Current | 0x2010 | int16 | L3 Three-Phase Grid Output Current | A | ×1000 |
+| Output Power | 0x2012 | int16 | Output Power | W | ×10 |
+| L1 Active Power | 0x2014 | int16 | L1 Three-Phase Grid Output Power | W | ×10 |
+| L2 Active Power | 0x2016 | int16 | L2 Three-Phase Grid Output Power | W | ×10 |
+| L3 Active Power | 0x2018 | int16 | L3 Three-Phase Grid Output Power | W | ×10 |
+| Energy Consumed (Main) | 0x401E | int16 | Energy Consumed | kWh | ×0.1 |
+| Energy Injected (Main) | 0x4028 | int16 | Energy Injected | kWh | ×0.1 |
+| Energy Consumed (Alt) | 0x101E | int16 | Energy Consumed (Alt) | kWh | ×0.1 |
+| Energy Injected (Alt) | 0x1028 | int16 | Energy Injected (Alt) | kWh | ×0.1 |
 
 **Source**: Based on verified Huawei DTSU666 implementation from [rdu70/P1-2-DTSU666](https://github.com/rdu70/P1-2-DTSU666).
 

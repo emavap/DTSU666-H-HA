@@ -35,14 +35,12 @@ DTSU666_REGISTERS = {
     # No assumptions or additions - these are the registers actually implemented in the source
 }
 
-# Entity mapping keys
+# Entity mapping keys (only for entities that have corresponding registers)
 ENTITY_MAPPINGS = [
-    "voltage_entity",
-    "current_l1_entity", 
-    "current_l2_entity",
-    "current_l3_entity",
-    "power_entity",
-    "energy_import_entity",
-    "energy_export_entity",
-    "frequency_entity",
+    "voltage_entity",           # Maps to voltage_l1 
+    "current_l1_entity",        # Maps to current_l1
+    "power_entity",             # Maps to output_power
+    "energy_import_entity",     # Maps to energy_consumed_main
+    "energy_export_entity",     # Maps to energy_injected_main  
+    "frequency_entity",         # Maps to frequency
 ]
