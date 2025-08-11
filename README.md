@@ -1,26 +1,26 @@
 # DTSU666 Emulator for Home Assistant
 
-This Home Assistant custom integration emulates a Huawei DTSU666-H ethernet version power meter via Modbus TCP. It allows you to use real values from your Home Assistant entities instead of fake values, making it perfect for testing and development scenarios.
+This Home Assistant custom integration emulates a Huawei DTSU666 power meter via Modbus TCP using verified register mapping. It allows you to use real values from your Home Assistant entities instead of fake values, making it perfect for testing and development scenarios with Huawei inverters.
 
 ## Features
 
-- **Accurate DTSU666-H Register Map**: Uses the correct Modbus register addresses and data types based on the actual device specifications
+- **Verified DTSU666 Register Map**: Uses the correct Modbus register addresses and data types from verified Huawei DTSU666 implementation
 - **Real Data Integration**: Maps Home Assistant sensor entities to corresponding power meter registers
 - **Proper Refresh Rate**: Matches the original device's 1-second update interval
-- **Full 3-Phase Support**: Supports voltage, current, power, energy, and frequency measurements for all phases
+- **Single-Phase Support**: Supports voltage, current, power, energy, and frequency measurements for single-phase systems
 - **Entity Validation**: Like real meters, rejects connections when entities have invalid data (unknown/unavailable)
 - **Easy Configuration**: Simple config flow setup through Home Assistant UI with full reconfigurability
 
 ## Supported Measurements
 
-The emulator supports all standard DTSU666-H measurements:
+The emulator supports all standard DTSU666-FE single-phase measurements:
 
-- **Voltage**: 3-phase voltages (L1, L2, L3)
-- **Current**: 3-phase currents (L1, L2, L3)  
+- **Voltage**: Single-phase voltage (230V AC typical)
+- **Current**: Single-phase current measurement
 - **Power**: Active, reactive, and apparent power
 - **Energy**: Import and export energy counters
-- **Power Factor**: Configurable power factor
-- **Frequency**: Grid frequency
+- **Power Factor**: Power factor measurement
+- **Frequency**: Grid frequency (50/60Hz)
 
 ## Installation
 
@@ -51,8 +51,8 @@ The emulator supports all standard DTSU666-H measurements:
    - **Port**: Modbus TCP port (default: 502)
    - **Unit ID**: Modbus unit ID (default: 1)
    - **Entity Mappings**: Select Home Assistant entities to map to each register:
-     - Voltage Entity
-     - Current L1/L2/L3 Entities
+     - Voltage Entity (Single Phase)
+     - Current Entity (Single Phase)
      - Power Entity
      - Energy Import/Export Entities
      - Frequency Entity
@@ -98,25 +98,24 @@ This ensures the emulator provides realistic behavior matching real hardware fai
 
 ## Register Map
 
-The integration uses the **verified DTSU666-H register map** from working GitHub implementation:
+The integration uses the **DTSU666 Huawei register map** based on verified implementation:
 
-| Register | Address | Type | Description | Unit | Scaling |
-|----------|---------|------|-------------|------|---------|
-| Voltage L1 | 0x2006 | float32 | Phase 1 Voltage (L-N) | V | ÷10 |
-| Voltage L2 | 0x2008 | float32 | Phase 2 Voltage (L-N) | V | ÷10 |
-| Voltage L3 | 0x200A | float32 | Phase 3 Voltage (L-N) | V | ÷10 |
-| Current L1 | 0x200C | float32 | Phase 1 Current | A | ÷1000 |
-| Current L2 | 0x200E | float32 | Phase 2 Current | A | ÷1000 |
-| Current L3 | 0x2010 | float32 | Phase 3 Current | A | ÷1000 |
-| Active Power | 0x2012 | float32 | Total Active Power | W | ÷10 |
-| Reactive Power | 0x201A | float32 | Total Reactive Power | var | ÷10 |
-| Apparent Power | 0x2022 | float32 | Total Apparent Power | VA | ÷10 |
-| Power Factor | 0x202A | float32 | Total Power Factor | - | ÷1000 |
-| Frequency | 0x2044 | float32 | Supply Frequency | Hz | ÷100 |
-| Energy Import | 0x401E | float32 | Total Import Energy | kWh | ×1000 |
-| Energy Export | 0x4028 | float32 | Total Export Energy | kWh | ×1000 |
+| Register | Address | Type | Description | Unit | Scale Factor |
+|----------|---------|------|-------------|------|-------------|
+| Voltage L1 | 0x2006 | int16 | Single-Phase Voltage | V | ×10 |
+| Current L1 | 0x200C | int16 | Single-Phase Current | A | ×1000 |
+| Active Power L1 | 0x2014 | int16 | L1 Active Power | W | ×10 |
+| Reactive Power L1 | 0x201C | int16 | L1 Reactive Power | var | ×10 |
+| Apparent Power L1 | 0x2022 | int16 | L1 Apparent Power | VA | ×10 |
+| Power Factor L1 | 0x202C | int16 | L1 Power Factor | - | ×1000 |
+| Frequency | 0x2044 | int16 | Grid Frequency | Hz | ×100 |
+| Total Active Power | 0x2012 | int16 | Total Output Power | W | ×10 |
+| Total Reactive Power | 0x201A | int16 | Total Reactive Power | var | ×10 |
+| Total Power Factor | 0x202A | int16 | Total Power Factor | - | ×1000 |
+| Energy Import | 0x401E | int32 | Energy Consumed | kWh | ×1 |
+| Energy Export | 0x4028 | int32 | Energy Injected | kWh | ×1 |
 
-**Source**: Verified from [working DTSU666-Modbus implementation](https://github.com/elfabriceu/DTSU666-Modbus) with cross-references to community deployments.
+**Source**: Based on verified Huawei DTSU666 implementation from [rdu70/P1-2-DTSU666](https://github.com/rdu70/P1-2-DTSU666).
 
 ## Troubleshooting
 

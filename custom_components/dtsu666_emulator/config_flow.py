@@ -95,20 +95,6 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                         device_class="current"
                     )
                 ),
-            vol.Optional("current_l2_entity", default=user_input.get("current_l2_entity")): 
-                selector.EntitySelector(
-                    selector.EntitySelectorConfig(
-                        domain="sensor",
-                        device_class="current"
-                    )
-                ),
-            vol.Optional("current_l3_entity", default=user_input.get("current_l3_entity")): 
-                selector.EntitySelector(
-                    selector.EntitySelectorConfig(
-                        domain="sensor",
-                        device_class="current"
-                    )
-                ),
             vol.Optional("power_entity", default=user_input.get("power_entity")): 
                 selector.EntitySelector(
                     selector.EntitySelectorConfig(
@@ -247,20 +233,6 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
                         )
                     ),
                 vol.Optional("current_l1_entity", default=current_data.get("current_l1_entity")): 
-                    selector.EntitySelector(
-                        selector.EntitySelectorConfig(
-                            domain="sensor",
-                            device_class="current"
-                        )
-                    ),
-                vol.Optional("current_l2_entity", default=current_data.get("current_l2_entity")): 
-                    selector.EntitySelector(
-                        selector.EntitySelectorConfig(
-                            domain="sensor",
-                            device_class="current"
-                        )
-                    ),
-                vol.Optional("current_l3_entity", default=current_data.get("current_l3_entity")): 
                     selector.EntitySelector(
                         selector.EntitySelectorConfig(
                             domain="sensor",

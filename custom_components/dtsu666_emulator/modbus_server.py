@@ -76,8 +76,6 @@ class DTSU666ModbusServer:
         mappings = {
             "voltage_entity": "voltage_l1",
             "current_l1_entity": "current_l1", 
-            "current_l2_entity": "current_l2",
-            "current_l3_entity": "current_l3",
             "power_entity": "active_power",
             "energy_import_entity": "energy_import",
             "energy_export_entity": "energy_export",
@@ -230,23 +228,26 @@ class DTSU666ModbusServer:
         """Initialize registers with default values."""
         slave_id = self.config["unit_id"]
         
-        # Set default values for all registers
+        # Set default values for EXACT registers from GitHub implementation
         defaults = {
+            # From JsonEntry array
+            "frequency": 50.0,
             "voltage_l1": 230.0,
-            "voltage_l2": 230.0,
+            "voltage_l2": 230.0, 
             "voltage_l3": 230.0,
             "current_l1": 0.0,
             "current_l2": 0.0,
             "current_l3": 0.0,
-            "active_power": 0.0,
-            "reactive_power": 0.0,
-            "apparent_power": 0.0,
-            "power_factor": 1.0,
-            "frequency": 50.0,
-            "energy_import": 0.0,
-            "energy_export": 0.0,
-            "reactive_energy_import": 0.0,
-            "reactive_energy_export": 0.0,
+            "output_power": 0.0,
+            "active_power_l1": 0.0,
+            "active_power_l2": 0.0,
+            "active_power_l3": 0.0,
+            
+            # Energy registers from setReg calls
+            "energy_consumed_main": 0.0,
+            "energy_injected_main": 0.0,
+            "energy_consumed_alt": 0.0,
+            "energy_injected_alt": 0.0,
         }
         
         for register_name, default_value in defaults.items():
@@ -307,8 +308,8 @@ class DTSU666ModbusServer:
         reg_type = register_info["type"]
         scale = register_info.get("scale", 1.0)
         
-        # Scale the value
-        scaled_value = value / scale
+        # Scale the value (multiply by scale factor as per DTSU666 implementation)
+        scaled_value = value * scale
         
         try:
             # Convert to appropriate data type and write to registers
