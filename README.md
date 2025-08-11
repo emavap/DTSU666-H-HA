@@ -98,21 +98,25 @@ This ensures the emulator provides realistic behavior matching real hardware fai
 
 ## Register Map
 
-The integration uses the authentic DTSU666-H register map:
+The integration uses the **verified DTSU666-H register map** from working GitHub implementation:
 
 | Register | Address | Type | Description | Unit | Scaling |
 |----------|---------|------|-------------|------|---------|
-| Voltage L1 | 0x2000 | float32 | Phase 1 Voltage | V | Direct |
-| Voltage L2 | 0x2006 | float32 | Phase 2 Voltage | V | Direct |
-| Voltage L3 | 0x2008 | float32 | Phase 3 Voltage | V | Direct |
-| Current L1 | 0x2002 | float32 | Phase 1 Current | A | Direct |
-| Current L2 | 0x200A | float32 | Phase 2 Current | A | Direct |
-| Current L3 | 0x200C | float32 | Phase 3 Current | A | Direct |
-| Active Power | 0x2004 | float32 | Total Active Power | W | ×1000 |
-| Reactive Power | 0x2012 | float32 | Total Reactive Power | var | ×1000 |
-| Frequency | 0x200E | float32 | Grid Frequency | Hz | Direct |
-| Energy Import | 0x400A | float32 | Imported Energy | kWh | Direct |
-| Energy Export | 0x4000 | float32 | Exported Energy | kWh | Direct |
+| Voltage L1 | 0x2006 | float32 | Phase 1 Voltage (L-N) | V | ÷10 |
+| Voltage L2 | 0x2008 | float32 | Phase 2 Voltage (L-N) | V | ÷10 |
+| Voltage L3 | 0x200A | float32 | Phase 3 Voltage (L-N) | V | ÷10 |
+| Current L1 | 0x200C | float32 | Phase 1 Current | A | ÷1000 |
+| Current L2 | 0x200E | float32 | Phase 2 Current | A | ÷1000 |
+| Current L3 | 0x2010 | float32 | Phase 3 Current | A | ÷1000 |
+| Active Power | 0x2012 | float32 | Total Active Power | W | ÷10 |
+| Reactive Power | 0x201A | float32 | Total Reactive Power | var | ÷10 |
+| Apparent Power | 0x2022 | float32 | Total Apparent Power | VA | ÷10 |
+| Power Factor | 0x202A | float32 | Total Power Factor | - | ÷1000 |
+| Frequency | 0x2044 | float32 | Supply Frequency | Hz | ÷100 |
+| Energy Import | 0x401E | float32 | Total Import Energy | kWh | ×1000 |
+| Energy Export | 0x4028 | float32 | Total Export Energy | kWh | ×1000 |
+
+**Source**: Verified from [working DTSU666-Modbus implementation](https://github.com/elfabriceu/DTSU666-Modbus) with cross-references to community deployments.
 
 ## Troubleshooting
 
