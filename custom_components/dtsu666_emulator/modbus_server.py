@@ -11,7 +11,13 @@ from pymodbus.datastore import ModbusSequentialDataBlock, ModbusSlaveContext, Mo
 from pymodbus.device import ModbusDeviceIdentification
 from pymodbus.constants import Endian
 from pymodbus.payload import BinaryPayloadBuilder, BinaryPayloadDecoder
-from pymodbus.pdu import ModbusExceptions
+# Handle ModbusExceptions vs ModbusException naming change
+try:
+    from pymodbus.pdu import ModbusExceptions
+    SERVER_DEVICE_FAILURE = ModbusExceptions.ServerDeviceFailure
+except ImportError:
+    # In newer versions, use the constants directly
+    SERVER_DEVICE_FAILURE = 4  # ServerDeviceFailure error code
 
 # Handle server imports - pymodbus 3.6+ moved these from server.async_io to server
 try:
@@ -47,7 +53,7 @@ class ValidatedModbusRequestHandler(ModbusConnectedRequestHandler):
         if hasattr(self.server_instance, '_are_entities_valid') and not self.server_instance._are_entities_valid():
             _LOGGER.warning("Rejecting Modbus request - entities have invalid data")
             # Return server device failure exception
-            request.ExceptionCode = ModbusExceptions.ServerDeviceFailure
+            request.ExceptionCode = SERVER_DEVICE_FAILURE
             return request
         
         # Process request normally if entities are valid
